@@ -5,16 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffeecoin Tap</title>
     <style>
-        body { background-color: #1a0f00; color: #fff; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; overflow: hidden; user-select: none; }
+        body { 
+            background-color: #1a0f00; 
+            color: #fff; 
+            text-align: center; 
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            overflow: hidden;
+            user-select: none;
+        }
         .header { margin-top: 20px; }
-        .title { font-size: 28px; font-weight: bold; color: #d35400; text-transform: uppercase; letter-spacing: 2px; }
-        .score-container { font-size: 48px; font-weight: 800; margin-top: 20px; color: #f39c12; text-shadow: 0 0 10px rgba(243,156,18,0.5); }
-        .game-container { display: flex; justify-content: center; align-items: center; height: 50vh; position: relative; }
-        .coin-btn { width: 220px; height: 220px; background: radial-gradient(circle, #e67e22 0%, #d35400 100%); border-radius: 50%; border: 8px solid #f39c12; cursor: pointer; box-shadow: 0 10px 25px rgba(211,84,0,0.6); position: relative; display: flex; justify-content: center; align-items: center; font-size: 90px; transition: transform 0.05s ease; animation: float 3s ease-in-out infinite; }
+        .title { font-size: 28px; font-weight: bold; color: #d35400; text-transform: uppercase; }
+        .score-container { font-size: 48px; font-weight: 800; margin-top: 20px; }
+        .game-container { display: flex; justify-content: center; align-items: center; margin-top: 30px; position: relative; width: 100%; max-width: 400px; }
+        .coin-btn { width: 220px; height: 220px; background: radial-gradient(circle, #e67e22, #d35400); border-radius: 50%; border: none; cursor: pointer; font-size: 80px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); outline: none; transition: transform 0.05s ease; }
         .coin-btn:active { transform: scale(0.92); }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .floating-text { position: absolute; font-size: 28px; font-weight: bold; color: #fff; pointer-events: none; animation: flyUp 0.6s ease-out forwards; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        @keyframes flyUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120px) scale(1.2); opacity: 0; } }
+        .floating-text { position: absolute; font-size: 32px; font-weight: bold; color: #f39c12; pointer-events: none; animation: flyUp 0.6s ease-out forwards; z-index: 10; }
+        @keyframes flyUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-120px); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -25,7 +38,6 @@
     <div class="game-container" id="gameArea">
         <button class="coin-btn" id="tapBtn">☕</button>
     </div>
-
     <script>
         let count = 0;
         const scoreEl = document.getElementById('score');
@@ -35,21 +47,21 @@
         tapBtn.addEventListener('click', (e) => {
             count++;
             scoreEl.innerText = count.toLocaleString();
-            
-            // Animasi Angka +1
+
             const rect = tapBtn.getBoundingClientRect();
-            const x = e.clientX - rect.left + tapBtn.offsetLeft - 100;
-            const y = e.clientY - rect.top + tapBtn.offsetTop - 120;
-            
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
             const num = document.createElement('div');
             num.classList.add('floating-text');
             num.innerText = '+1';
-            num.style.left = `${x}px`;
-            num.style.top = `${y}px`;
-            
+            num.style.left = x + 'px';
+            num.style.top = y + 'px';
+
             gameArea.appendChild(num);
             setTimeout(() => num.remove(), 600);
         });
     </script>
 </body>
 </html>
+
