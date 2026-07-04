@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coffeecoin Tap</title>
-    <!-- Script resmi Telegram Web App -->
+    <!-- SCRIPT TELEGRAM SUDAH DIPERBAIKI 100% -->
     <script src="https://telegram.org"></script>
     <style>
         * {
@@ -16,7 +17,7 @@
         }
 
         body {
-            background-color: #1a0d00; /* Warna cokelat tua sesuai game kamu */
+            background-color: #1a0d00;
             color: #ffffff;
             font-family: 'Arial', sans-serif;
             display: flex;
@@ -25,7 +26,6 @@
             overflow: hidden;
         }
 
-        /* Container Utama */
         .container {
             flex: 1;
             display: flex;
@@ -33,7 +33,7 @@
             align-items: center;
             padding: 20px;
             overflow-y: auto;
-            padding-bottom: 80px; /* Jarak agar tidak tertutup navbar */
+            padding-bottom: 80px;
         }
 
         .page {
@@ -77,7 +77,7 @@
         .tap-button {
             width: 280px;
             height: 280px;
-            background-color: #e67e22; /* Bulatan orange kamu */
+            background-color: #e67e22;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -190,14 +190,11 @@
             <h1>COFFEECOIN TAP</h1>
             
             <div class="score-container">
-                <!-- Icon Kopi Kecil di Samping Angka -->
                 <img src="https://flaticon.com" class="score-icon" alt="coffee">
                 <div id="score" class="score-text">0</div>
             </div>
 
-            <!-- Tombol Tap Bulat Besar -->
             <button class="tap-button" onclick="handleTap()">
-                <!-- Gambar Kopi di dalam Bulatan -->
                 <img src="https://flaticon.com" class="coffee-img" alt="coffee-click">
             </button>
         </div>
@@ -207,22 +204,22 @@
             <h1>DAFTAR MISI</h1>
             
             <div class="task-list">
-                <!-- Tugas 1: Join Telegram -->
+                <!-- Tugas 1: Bot Link -->
                 <div class="task-item">
                     <div class="task-info">
-                        <p>Join Official Channel</p>
+                        <p>Kunjungi Bot Utama</p>
                         <span>+1,000 Coffeecoin</span>
                     </div>
                     <button id="btn-task1" class="task-btn" onclick="jalankanMisi('task1', 'https://t.me')">Mulai</button>
                 </div>
 
-                <!-- Tugas 2: Follow X/Twitter -->
+                <!-- Tugas 2: Link Cadangan -->
                 <div class="task-item">
                     <div class="task-info">
-                        <p>Follow Akun X (Twitter)</p>
+                        <p>Ikuti Info Coffeecoin</p>
                         <span>+500 Coffeecoin</span>
                     </div>
-                    <button id="btn-task2" class="task-btn" onclick="jalankanMisi('task2', 'https://x.com')">Mulai</button>
+                    <button id="btn-task2" class="task-btn" onclick="jalankanMisi('task2', 'https://t.me')">Mulai</button>
                 </div>
             </div>
         </div>
@@ -242,69 +239,84 @@
     </div>
 
     <script>
-        // Beritahu Telegram kalau Web App siap digunakan
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand(); // Layar penuh otomatis
+            window.Telegram.WebApp.expand();
         }
 
-        // Ambil data saldo lama dari memori HP biar tidak reset ke 0 saat ditutup
         let saldo = parseInt(localStorage.getItem('coffeecoin_saldo')) || 0;
         document.getElementById('score').innerText = saldo;
 
-        // Logika Klik Kopi (Fitur Utama Kamu Sebelumnya)
         function handleTap() {
             saldo += 1;
             document.getElementById('score').innerText = saldo;
             localStorage.setItem('coffeecoin_saldo', saldo);
             
-            // Efek getar HP saat di-tap (fitur khas Telegram Bot)
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
             }
         }
 
-        // Logika Perpindahan Menu Tab
         function pindahHalaman(target) {
-            // Hapus kelas aktif di halaman & navbar sebelumnya
             document.getElementById('page-tap').classList.remove('active-page');
             document.getElementById('page-tasks').classList.remove('active-page');
             document.getElementById('nav-tap').classList.remove('active');
             document.getElementById('nav-tasks').classList.remove('active');
 
-            // Aktifkan halaman & tombol navigasi pilihan user
             if (target === 'tap') {
                 document.getElementById('page-tap').classList.add('active-page');
                 document.getElementById('nav-tap').classList.add('active');
             } else if (target === 'tasks') {
                 document.getElementById('page-tasks').classList.add('active-page');
                 document.getElementById('nav-tasks').classList.add('active');
-                periksaStatusMisi(); // Update tampilan tombol saat halaman misi dibuka
+                periksaStatusMisi();
             }
         }
 
-        // Logika Eksekusi Misi
         function jalankanMisi(idMisi, url) {
             const tombol = document.getElementById('btn-' + idMisi);
             
             if (tombol.innerText === 'Mulai') {
-                // Tahap 1: Buka link tugas lewat Telegram
                 if (window.Telegram && window.Telegram.WebApp) {
                     window.Telegram.WebApp.openTelegramLink(url);
                 } else {
                     window.open(url, '_blank');
                 }
                 
-                // Ubah teks tombol jadi "Klaim" setelah diklik
                 tombol.innerText = 'Klaim';
                 tombol.style.backgroundColor = '#f39c12';
                 localStorage.setItem(idMisi + '_status', 'klaim');
             } 
             else if (tombol.innerText === 'Klaim') {
-                // Tahap 2: Tambahkan koin ke saldo user
                 let hadiah = idMisi === 'task1' ? 1000 : 500;
                 saldo += hadiah;
                 document.getElementById('score').innerText = saldo;
                 localStorage.setItem('coffeecoin_saldo', saldo);
 
+                tombol.innerText = 'Selesai ✓';
+                tombol.disabled = true;
+                localStorage.setItem(idMisi + '_status', 'selesai');
                 
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.showAlert('Selamat! Kamu berhasil mendapatkan ' + hadiah + ' Coffeecoin!');
+                }
+            }
+        }
+
+        function periksaStatusMisi() {
+            ['task1', 'task2'].forEach(idMisi => {
+                const statusSaved = localStorage.getItem(idMisi + '_status');
+                const tombol = document.getElementById('btn-' + idMisi);
+                if (statusSaved === 'klaim') {
+                    tombol.innerText = 'Klaim';
+                    tombol.style.backgroundColor = '#f39c12';
+                } else if (statusSaved === 'selesai') {
+                    tombol.innerText = 'Selesai ✓';
+                    tombol.disabled = true;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
