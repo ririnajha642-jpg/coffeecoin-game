@@ -4,64 +4,311 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffeecoin Tap</title>
+    <!-- Script resmi Telegram WebApp API -->
+    <script src="https://telegram.org"></script>
     <style>
-        body { 
-            background-color: #1a0f00; 
-            color: #fff; 
-            text-align: center; 
-            font-family: sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            overflow: hidden;
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a0f00; /* Warna cokelat gelap */
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
             user-select: none;
         }
-        .header { margin-top: 20px; }
-        .title { font-size: 28px; font-weight: bold; color: #d35400; text-transform: uppercase; }
-        .score-container { font-size: 48px; font-weight: 800; margin-top: 20px; }
-        .game-container { display: flex; justify-content: center; align-items: center; margin-top: 30px; position: relative; width: 100%; max-width: 400px; }
-        .coin-btn { width: 220px; height: 220px; background: radial-gradient(circle, #e67e22, #d35400); border-radius: 50%; border: none; cursor: pointer; font-size: 80px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); outline: none; transition: transform 0.05s ease; }
-        .coin-btn:active { transform: scale(0.92); }
-        .floating-text { position: absolute; font-size: 32px; font-weight: bold; color: #f39c12; pointer-events: none; animation: flyUp 0.6s ease-out forwards; z-index: 10; }
-        @keyframes flyUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-120px); opacity: 0; } }
+
+        /* Struktur Halaman Utama & Halaman Tasks */
+        .page {
+            padding: 20px;
+            padding-bottom: 90px; /* Jarak agar konten tidak tertutup menu bawah */
+        }
+
+        .title {
+            color: #e67e22;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 40px;
+            letter-spacing: 2px;
+        }
+
+        /* Container Skor Koin */
+        .score-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .score-icon {
+            font-size: 35px;
+        }
+
+        .score-text {
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        /* Tombol Tap Utama */
+        .tap-area {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .circle-btn {
+            width: 250px;
+            height: 250px;
+            background-color: #d35400;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(211, 84, 0, 0.5);
+            cursor: pointer;
+            transition: transform 0.05s ease;
+        }
+
+        .circle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .coffee-display {
+            font-size: 80px;
+        }
+
+        /* Desain List Tempat Misi (Tasks) */
+        .task-list {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .task-item {
+            background-color: #2c1a04;
+            border: 1px solid #4a2d0b;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+
+        .task-info h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .task-info p {
+            margin: 0;
+            color: #f39c12;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .task-action {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-task {
+            background-color: #e67e22;
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-claim {
+            background-color: #27ae60;
+        }
+
+        .btn-task:disabled {
+            background-color: #7f8c8d;
+            cursor: not-allowed;
+        }
+
+        /* Menu Navigasi Navigasi Bawah (Navbar) */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #110a00;
+            border-top: 2px solid #331e03;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: #888888;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 50%;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .nav-item.active {
+            color: #e67e22;
+        }
+
+        .nav-icon {
+            font-size: 22px;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="title">Coffeecoin Tap</div>
-        <div class="score-container">☕ <span id="score">0</span></div>
+
+    <!-- 1. HALAMAN UTAMA (TAP GAME) -->
+    <div id="page-tap" class="page">
+        <div class="title">COFFEECOIN TAP</div>
+        
+        <div class="score-container">
+            <span class="score-icon">☕</span>
+            <span id="score-text" class="score-text">0</span>
+        </div>
+
+        <div class="tap-area">
+            <div class="circle-btn" onclick="tambahKoin()">
+                <span class="coffee-display">☕</span>
+            </div>
+        </div>
     </div>
-    <div class="game-container" id="gameArea">
-        <button class="coin-btn" id="tapBtn">☕</button>
+
+    <!-- 2. HALAMAN MISI (TASKS) -->
+    <div id="page-tasks" class="page" style="display: none;">
+        <div class="title">TASKS</div>
+        <p style="color: #bdc3c7; margin-bottom: 20px;">Selesaikan misi untuk mendapatkan bonus koin!</p>
+
+        <div class="task-list">
+            <!-- Item Misi 1 (Sudah otomatis mengarah ke channel Coffeecoin Official kamu) -->
+            <div class="task-item">
+                <div class="task-info">
+                    <h4>Join Telegram Channel</h4>
+                    <p>+1,000 COFFEE</p>
+                </div>
+                <div class="task-action">
+                    <button id="btn-join-1" class="btn-task" onclick="bukaMisi('https://t.me', '1')">Join</button>
+                    <button id="btn-claim-1" class="btn-task btn-claim" onclick="klaimMisi('1', 1000)" style="display: none;">Claim</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- 3. MENU NAVIGASI BAWAH -->
+    <nav class="navbar">
+        <button id="nav-tap" class="nav-item active" onclick="pindahTab('tap')">
+            <span class="nav-icon">☕</span>
+            <span>Tap</span>
+        </button>
+        <button id="nav-tasks" class="nav-item" onclick="pindahTab('tasks')">
+            <span class="nav-icon">📋</span>
+            <span>Tasks</span>
+        </button>
+    </nav>
+
     <script>
-        let count = 0;
-        const scoreEl = document.getElementById('score');
-        const tapBtn = document.getElementById('tapBtn');
-        const gameArea = document.getElementById('gameArea');
+        // Mengambil simpanan skor koin dari LocalStorage HP user
+        let totalKoin = parseInt(localStorage.getItem('coffeecoin_score')) || 0;
+        document.getElementById('score-text').innerText = totalKoin.toLocaleString();
 
-        tapBtn.addEventListener('click', (e) => {
-            count++;
-            scoreEl.innerText = count.toLocaleString();
+        // Inisialisasi API Telegram Mini App
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand(); // Membuat aplikasi langsung terbuka layar penuh
+        }
 
-            const rect = tapBtn.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+        // Fungsi menambah koin saat kopi besar di-tap
+        function tambahKoin() {
+            totalKoin += 1;
+            document.getElementById('score-text').innerText = totalKoin.toLocaleString();
+            localStorage.setItem('coffeecoin_score', totalKoin);
+        }
 
-            const num = document.createElement('div');
-            num.classList.add('floating-text');
-            num.innerText = '+1';
-            num.style.left = x + 'px';
-            num.style.top = y + 'px';
+        // Fungsi berpindah halaman (Tab System)
+        function pindahTab(target) {
+            const pageTap = document.getElementById('page-tap');
+            const pageTasks = document.getElementById('page-tasks');
+            const navTap = document.getElementById('nav-tap');
+            const navTasks = document.getElementById('nav-tasks');
 
-            gameArea.appendChild(num);
-            setTimeout(() => num.remove(), 600);
-        });
+            if (target === 'tap') {
+                pageTap.style.display = 'block';
+                pageTasks.style.display = 'none';
+                navTap.classList.add('active');
+                navTasks.classList.remove('active');
+            } else if (target === 'tasks') {
+                pageTap.style.display = 'none';
+                pageTasks.style.display = 'block';
+                navTap.classList.remove('active');
+                navTasks.classList.add('active');
+
+                // Validasi ulang status tombol setiap kali menu dibuka
+                periksaStatusTombol('1');
+            }
+        }
+
+        // Fungsi membuka link tugas sosial media / Telegram channel
+        function bukaMisi(url, idMisi) {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.openTelegramLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+            
+            // Tandai misi sebagai "sudah dibuka link-nya"
+            localStorage.setItem(`task_${idMisi}_status`, 'opened');
+            
+            // Munculkan tombol klaim hadiah setelah jeda singkat 1 detik
+            setTimeout(() => {
+                periksaStatusTombol(idMisi);
+            }, 1000);
+        }
+
+        // Fungsi klaim koin dari misi yang selesai
+        function klaimMisi(idMisi, reward) {
+            totalKoin += reward;
+            document.getElementById('score-text').innerText = totalKoin.toLocaleString();
+            localStorage.setItem('coffeecoin_score', totalKoin);
+
+            // Simpan status terkunci permanen agar tidak bisa diklaim berulang-ulang
+            localStorage.setItem(`task_${idMisi}_status`, 'claimed');
+            periksaStatusTombol(idMisi);
+        }
+
+        // Fungsi merubah bentuk tampilan tombol aksi misi
+        function periksaStatusTombol(idMisi) {
+            const status = localStorage.getItem(`task_${idMisi}_status`);
+            const btnJoin = document.getElementById(`btn-join-${idMisi}`);
+            const btnClaim = document.getElementById(`btn-claim-${idMisi}`);
+
+            if (status === 'opened') {
+                btnJoin.style.display = 'none';
+                btnClaim.style.display = 'block';
+            } else if (status === 'claimed') {
+                btnJoin.style.display = 'none';
+                btnClaim.style.display = 'block';
+                btnClaim.innerText = 'Claimed ✓';
+                btnClaim.disabled = true;
+                btnClaim.style.backgroundColor = '#7f8c8d';
+            }
+        }
     </script>
 </body>
 </html>
-
