@@ -62,8 +62,10 @@
             margin-bottom: 40px;
         }
 
-        .score-emoji {
-            font-size: 40px;
+        .score-icon-small {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
 
         .score-text {
@@ -84,14 +86,19 @@
             transition: transform 0.1s ease;
             border: none;
             outline: none;
+            position: relative;
         }
 
         .tap-button:active {
             transform: scale(0.95);
         }
 
-        .coffee-emoji-big {
-            font-size: 110px;
+        /* KUNCI UTAMA: pointer-events: none membuat klik menembus gambar langsung ke tombol */
+        .coffee-image-big {
+            width: 190px;
+            height: 190px;
+            object-fit: contain;
+            pointer-events: none; 
         }
 
         /* --- HALAMAN TASKS MANUAL --- */
@@ -199,8 +206,10 @@
             color: #e67e22;
         }
 
-        .nav-icon {
-            font-size: 20px;
+        .nav-icon-menu {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -213,12 +222,15 @@
             <h1>COFFEECOIN TAP</h1>
             
             <div class="score-container">
-                <span class="score-emoji">☕</span>
+                <!-- Gambar Koin Kecil Bawaan Project Kamu -->
+                <img src="coffee.png" class="score-icon-small" alt="coffee">
                 <div id="score" class="score-text">0</div>
             </div>
 
+            <!-- Tombol Utama yang Bisa Diktep -->
             <button class="tap-button" onclick="handleTap()">
-                <span class="coffee-emoji-big">☕</span>
+                <!-- Gambar Koin Besar Bawaan Project Kamu -->
+                <img src="coffee-click.png" class="coffee-image-big" alt="coffee-click">
             </button>
         </div>
 
@@ -266,26 +278,26 @@
     <!-- MENU NAVIGASI BAWAH -->
     <div class="navbar">
         <button id="nav-tap" class="nav-item active" onclick="pindahHalaman('tap')">
-            <span class="nav-icon">☕</span>
+            <img src="coffee.png" class="nav-icon-menu" alt="Tap">
             <span>Tap</span>
         </button>
         <button id="nav-tasks" class="nav-item" onclick="pindahHalaman('tasks')">
-            <span class="nav-icon">📋</span>
+            <!-- Icon Checklist untuk Menu Tasks -->
+            <span style="font-size: 20px;">📋</span>
             <span>Tasks</span>
         </button>
     </div>
 
     <script>
-        // === 🛠️ PENGATURAN BOT TELEGRAM (WAJIB DIISI) 🛠️ ===
-        const BOT_TOKEN = "TOKEN_BOT_KAMU"; // Ganti dengan token bot kamu dari @BotFather
-        const ADMIN_CHAT_ID = "ID_CHAT_TELEGRAM_ADMIN"; // Ganti dengan ID Telegram kamu (bisa cek di @userinfobot)
+        // === 🛠️ PENGATURAN BOT TELEGRAM (WAJIB DIISI AGAR LAPORAN MASUK) 🛠️ ===
+        const BOT_TOKEN = "TOKEN_BOT_KAMU"; // Ganti pakai token bot kamu dari @BotFather
+        const ADMIN_CHAT_ID = "ID_CHAT_TELEGRAM_ADMIN"; // Ganti pakai ID Telegram kamu dari @userinfobot
 
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
         }
 
-        // Ambil data user Telegram jika membuka lewat aplikasi Telegram Mini App
         let telegramUser = "User Unknown";
         let telegramUserId = "No ID";
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
@@ -308,14 +320,4 @@
         }
 
         function pindahHalaman(target) {
-            document.getElementById('page-tap').classList.remove('active-page');
-            document.getElementById('page-tasks').classList.remove('active-page');
-            document.getElementById('nav-tap').classList.remove('active');
-            document.getElementById('nav-tasks').classList.remove('active');
-
-            if (target === 'tap') {
-                document.getElementById('page-tap').classList.add('active-page');
-                document.getElementById('nav-tap').classList.add('active');
-            } else if (target === 'tasks') {
-                document.getElementById('page-tasks').classList.add('active-page');
-        
+    
