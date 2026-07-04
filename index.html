@@ -63,9 +63,7 @@
         }
 
         .score-icon-small {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
+            font-size: 32px;
         }
 
         .score-text {
@@ -86,18 +84,15 @@
             transition: transform 0.1s ease;
             border: none;
             outline: none;
-            position: relative;
         }
 
         .tap-button:active {
             transform: scale(0.95);
         }
 
-        /* KUNCI UTAMA: pointer-events: none membuat klik menembus gambar langsung ke tombol */
         .coffee-image-big {
-            width: 190px;
-            height: 190px;
-            object-fit: contain;
+            font-size: 110px;
+            line-height: 1;
             pointer-events: none; 
         }
 
@@ -207,9 +202,7 @@
         }
 
         .nav-icon-menu {
-            width: 22px;
-            height: 22px;
-            object-fit: contain;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -222,15 +215,12 @@
             <h1>COFFEECOIN TAP</h1>
             
             <div class="score-container">
-                <!-- Gambar Koin Kecil Bawaan Project Kamu -->
-                <img src="coffee.png" class="score-icon-small" alt="coffee">
+                <span class="score-icon-small">☕</span>
                 <div id="score" class="score-text">0</div>
             </div>
 
-            <!-- Tombol Utama yang Bisa Diktep -->
             <button class="tap-button" onclick="handleTap()">
-                <!-- Gambar Koin Besar Bawaan Project Kamu -->
-                <img src="coffee-click.png" class="coffee-image-big" alt="coffee-click">
+                <span class="coffee-image-big">☕</span>
             </button>
         </div>
 
@@ -278,20 +268,19 @@
     <!-- MENU NAVIGASI BAWAH -->
     <div class="navbar">
         <button id="nav-tap" class="nav-item active" onclick="pindahHalaman('tap')">
-            <img src="coffee.png" class="nav-icon-menu" alt="Tap">
+            <span class="nav-icon-menu">☕</span>
             <span>Tap</span>
         </button>
         <button id="nav-tasks" class="nav-item" onclick="pindahHalaman('tasks')">
-            <!-- Icon Checklist untuk Menu Tasks -->
-            <span style="font-size: 20px;">📋</span>
+            <span class="nav-icon-menu">📋</span>
             <span>Tasks</span>
         </button>
     </div>
 
     <script>
-        // === 🛠️ PENGATURAN BOT TELEGRAM (WAJIB DIISI AGAR LAPORAN MASUK) 🛠️ ===
-        const BOT_TOKEN = "TOKEN_BOT_KAMU"; // Ganti pakai token bot kamu dari @BotFather
-        const ADMIN_CHAT_ID = "ID_CHAT_TELEGRAM_ADMIN"; // Ganti pakai ID Telegram kamu dari @userinfobot
+        // === 🛠️ PENGATURAN BOT TELEGRAM (WAJIB DIISI) ===
+        const BOT_TOKEN = "TOKEN_BOT_KAMU"; 
+        const ADMIN_CHAT_ID = "ID_CHAT_TELEGRAM_ADMIN"; 
 
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
@@ -320,3 +309,13 @@
         }
 
         function pindahHalaman(target) {
+            document.getElementById('page-tap').classList.remove('active-page');
+            document.getElementById('page-tasks').classList.remove('active-page');
+            document.getElementById('nav-tap').classList.remove('active');
+            document.getElementById('nav-tasks').classList.remove('active');
+
+            if (target === 'tap') {
+                document.getElementById('page-tap').classList.add('active-page');
+                document.getElementById('nav-tap').classList.add('active');
+            } else if (target === 'tasks') {
+                document.getElementById('page-tasks').classList.add('active-page');
