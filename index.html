@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coffeecoin Tap</title>
-    <!-- SCRIPT TELEGRAM SUDAH DIPERBAIKI 100% -->
     <script src="https://telegram.org"></script>
     <style>
         * {
@@ -33,7 +31,7 @@
             align-items: center;
             padding: 20px;
             overflow-y: auto;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
         }
 
         .page {
@@ -52,7 +50,7 @@
             color: #d27d2d;
             font-size: 24px;
             letter-spacing: 1px;
-            margin-top: 40px;
+            margin-top: 30px;
             margin-bottom: 20px;
         }
 
@@ -60,13 +58,12 @@
         .score-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 40px;
         }
 
-        .score-icon {
-            width: 50px;
-            height: auto;
+        .score-emoji {
+            font-size: 40px;
         }
 
         .score-text {
@@ -93,16 +90,15 @@
             transform: scale(0.95);
         }
 
-        .coffee-img {
-            width: 140px;
-            height: auto;
+        .coffee-emoji-big {
+            font-size: 110px;
         }
 
-        /* --- HALAMAN TASKS --- */
+        /* --- HALAMAN TASKS MANUAL --- */
         .task-list {
             width: 100%;
             max-width: 400px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .task-item {
@@ -110,11 +106,17 @@
             border: 1px solid #4a2f17;
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .task-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            text-align: left;
         }
 
         .task-info p {
@@ -128,18 +130,38 @@
             color: #f39c12;
         }
 
+        .task-action-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .task-input {
+            flex: 1;
+            background-color: #110800;
+            border: 1px solid #4a2f17;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
         .task-btn {
             background-color: #e67e22;
             color: white;
             border: none;
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            white-space: nowrap;
+            font-size: 14px;
         }
 
         .task-btn:disabled {
-            background-color: #555;
+            background-color: #555 !important;
             color: #aaa;
             cursor: not-allowed;
         }
@@ -156,6 +178,7 @@
             justify-content: space-around;
             align-items: center;
             border-top: 2px solid #2c1a0c;
+            z-index: 100;
         }
 
         .nav-item {
@@ -190,37 +213,51 @@
             <h1>COFFEECOIN TAP</h1>
             
             <div class="score-container">
-                <img src="https://flaticon.com" class="score-icon" alt="coffee">
+                <span class="score-emoji">☕</span>
                 <div id="score" class="score-text">0</div>
             </div>
 
             <button class="tap-button" onclick="handleTap()">
-                <img src="https://flaticon.com" class="coffee-img" alt="coffee-click">
+                <span class="coffee-emoji-big">☕</span>
             </button>
         </div>
 
-        <!-- HALAMAN TUGAS (TASKS) -->
+        <!-- HALAMAN TUGAS (TASKS MANUAL) -->
         <div id="page-tasks" class="page">
             <h1>DAFTAR MISI</h1>
             
             <div class="task-list">
-                <!-- Tugas 1: Bot Link -->
+                
+                <!-- MISI 1 -->
                 <div class="task-item">
-                    <div class="task-info">
-                        <p>Kunjungi Bot Utama</p>
-                        <span>+1,000 Coffeecoin</span>
+                    <div class="task-header">
+                        <div class="task-info">
+                            <p>1. Join Channel Telegram</p>
+                            <span>+1,000 Coffeecoin</span>
+                        </div>
+                        <button class="task-btn" onclick="bukaLink('https://t.me')">Buka Link</button>
                     </div>
-                    <button id="btn-task1" class="task-btn" onclick="jalankanMisi('task1', 'https://t.me')">Mulai</button>
+                    <div class="task-action-row">
+                        <input type="text" id="input-task1" class="task-input" placeholder="Masukkan Username Telegram kamu...">
+                        <button id="btn-task1" class="task-btn" style="background-color: #27ae60;" onclick="kirimBuktiManual('task1', 'Join Channel Telegram')">Kirim</button>
+                    </div>
                 </div>
 
-                <!-- Tugas 2: Link Cadangan -->
+                <!-- MISI 2 -->
                 <div class="task-item">
-                    <div class="task-info">
-                        <p>Ikuti Info Coffeecoin</p>
-                        <span>+500 Coffeecoin</span>
+                    <div class="task-header">
+                        <div class="task-info">
+                            <p>2. Follow Akun X / Twitter</p>
+                            <span>+500 Coffeecoin</span>
+                        </div>
+                        <button class="task-btn" onclick="bukaLink('https://x.com')">Buka Link</button>
                     </div>
-                    <button id="btn-task2" class="task-btn" onclick="jalankanMisi('task2', 'https://t.me')">Mulai</button>
+                    <div class="task-action-row">
+                        <input type="text" id="input-task2" class="task-input" placeholder="Masukkan Username X kamu...">
+                        <button id="btn-task2" class="task-btn" style="background-color: #27ae60;" onclick="kirimBuktiManual('task2', 'Follow Akun X / Twitter')">Kirim</button>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -239,9 +276,22 @@
     </div>
 
     <script>
+        // === 🛠️ PENGATURAN BOT TELEGRAM (WAJIB DIISI) 🛠️ ===
+        const BOT_TOKEN = "TOKEN_BOT_KAMU"; // Ganti dengan token bot kamu dari @BotFather
+        const ADMIN_CHAT_ID = "ID_CHAT_TELEGRAM_ADMIN"; // Ganti dengan ID Telegram kamu (bisa cek di @userinfobot)
+
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
+        }
+
+        // Ambil data user Telegram jika membuka lewat aplikasi Telegram Mini App
+        let telegramUser = "User Unknown";
+        let telegramUserId = "No ID";
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+            const user = window.Telegram.WebApp.initDataUnsafe.user;
+            telegramUser = user.username ? "@" + user.username : user.first_name;
+            telegramUserId = user.id;
         }
 
         let saldo = parseInt(localStorage.getItem('coffeecoin_saldo')) || 0;
@@ -268,55 +318,4 @@
                 document.getElementById('nav-tap').classList.add('active');
             } else if (target === 'tasks') {
                 document.getElementById('page-tasks').classList.add('active-page');
-                document.getElementById('nav-tasks').classList.add('active');
-                periksaStatusMisi();
-            }
-        }
-
-        function jalankanMisi(idMisi, url) {
-            const tombol = document.getElementById('btn-' + idMisi);
-            
-            if (tombol.innerText === 'Mulai') {
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.openTelegramLink(url);
-                } else {
-                    window.open(url, '_blank');
-                }
-                
-                tombol.innerText = 'Klaim';
-                tombol.style.backgroundColor = '#f39c12';
-                localStorage.setItem(idMisi + '_status', 'klaim');
-            } 
-            else if (tombol.innerText === 'Klaim') {
-                let hadiah = idMisi === 'task1' ? 1000 : 500;
-                saldo += hadiah;
-                document.getElementById('score').innerText = saldo;
-                localStorage.setItem('coffeecoin_saldo', saldo);
-
-                tombol.innerText = 'Selesai ✓';
-                tombol.disabled = true;
-                localStorage.setItem(idMisi + '_status', 'selesai');
-                
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.showAlert('Selamat! Kamu berhasil mendapatkan ' + hadiah + ' Coffeecoin!');
-                }
-            }
-        }
-
-        function periksaStatusMisi() {
-            ['task1', 'task2'].forEach(idMisi => {
-                const statusSaved = localStorage.getItem(idMisi + '_status');
-                const tombol = document.getElementById('btn-' + idMisi);
-                if (statusSaved === 'klaim') {
-                    tombol.innerText = 'Klaim';
-                    tombol.style.backgroundColor = '#f39c12';
-                } else if (statusSaved === 'selesai') {
-                    tombol.innerText = 'Selesai ✓';
-                    tombol.disabled = true;
-                }
-            });
-        }
-    </script>
-</body>
-</html>
-
+        
