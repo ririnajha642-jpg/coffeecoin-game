@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coffeecoin Tap</title>
     <!-- Script resmi Telegram WebApp API -->
     <script src="https://telegram.org"></script>
@@ -12,80 +12,96 @@
             padding: 0;
             background-color: #1a0f00; 
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
             user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
         }
 
         .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 75px);
+            box-sizing: border-box;
             padding: 20px;
-            padding-bottom: 100px; 
+            overflow-y: auto;
         }
 
         .title {
             color: #e67e22;
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 40px;
+            font-size: 26px;
+            font-weight: 800;
+            margin-top: 30px;
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .score-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin: 30px 0;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .score-icon {
+            font-size: 32px;
         }
 
         .score-text {
-            font-size: 45px;
+            font-size: 42px;
             font-weight: bold;
         }
 
         .tap-area {
-            margin-top: 50px;
+            margin-top: 40px;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         .circle-btn {
-            width: 250px;
-            height: 250px;
-            background-color: #d35400;
+            width: 230px;
+            height: 230px;
+            background: linear-gradient(145deg, #d35400, #e67e22);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 25px rgba(211, 84, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(211, 84, 0, 0.6);
             cursor: pointer;
             transition: transform 0.05s ease;
+            touch-action: manipulation;
         }
 
         .circle-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .coffee-display {
-            font-size: 80px;
+            font-size: 85px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
         }
 
         .task-list {
-            margin-top: 30px;
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .task-item {
             background-color: #2c1a04;
             border: 1px solid #4a2d0b;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 14px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             text-align: left;
-            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .task-row {
@@ -95,14 +111,15 @@
         }
 
         .task-info h4 {
-            margin: 0 0 5px 0;
-            font-size: 16px;
+            margin: 0 0 4px 0;
+            font-size: 15px;
+            color: #ffffff;
         }
 
         .task-info p {
             margin: 0;
             color: #f39c12;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
         }
 
@@ -115,11 +132,16 @@
             background-color: #e67e22;
             border: none;
             color: white;
-            padding: 8px 14px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .btn-task:active {
+            opacity: 0.8;
         }
 
         .btn-claim {
@@ -127,19 +149,9 @@
         }
 
         .btn-task:disabled {
-            background-color: #7f8c8d;
+            background-color: #555555 !important;
+            color: #aaaaaa;
             cursor: not-allowed;
-        }
-
-        .input-verify {
-            width: 90%;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #4a2d0b;
-            background-color: #110a00;
-            color: white;
-            font-size: 14px;
-            margin-top: 5px;
         }
 
         .navbar {
@@ -147,9 +159,9 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 70px;
+            height: 75px;
             background-color: #110a00;
-            border-top: 2px solid #331e03;
+            border-top: 1px solid #331e03;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -159,17 +171,18 @@
         .nav-item {
             background: none;
             border: none;
-            color: #888888;
-            font-size: 14px;
-            font-weight: bold;
+            color: #7f8c8d;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             width: 50%;
             height: 100%;
             justify-content: center;
+            transition: color 0.2s;
         }
 
         .nav-item.active {
@@ -177,13 +190,13 @@
         }
 
         .nav-icon {
-            font-size: 22px;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. HALAMAN UTAMA (TAP GAME) -->
+    <!-- 1. HALAMAN GAME TAP -->
     <div id="page-tap" class="page">
         <div class="title">COFFEECOIN TAP</div>
         <div class="score-container">
@@ -191,123 +204,111 @@
             <span id="score-text" class="score-text">0</span>
         </div>
         <div class="tap-area">
-            <div class="circle-btn" onclick="tambahKoin()">
+            <div class="circle-btn" id="tap-target">
                 <span class="coffee-display">☕</span>
             </div>
         </div>
     </div>
 
-    <!-- 2. HALAMAN MISI (TASKS) -->
+    <!-- 2. HALAMAN DAFTAR TUGAS (TASKS) -->
     <div id="page-tasks" class="page" style="display: none;">
         <div class="title">TASKS</div>
-        <p style="color: #bdc3c7; margin-bottom: 20px;">Selesaikan misi untuk mendapatkan bonus koin!</p>
+        <p style="color: #bdc3c7; margin-bottom: 20px; font-size: 14px;">Selesaikan misi di bawah ini untuk klaim hadiah!</p>
 
         <div class="task-list">
             
-            <!-- MISI 1: JOIN TELEGRAM -->
+            <!-- MISI TELEGRAM CHANNEL -->
             <div class="task-item">
                 <div class="task-row">
                     <div class="task-info">
-                        <h4>Join Telegram Channel</h4>
+                        <h4>Join Our Telegram Channel</h4>
                         <p>+1,000 COFFEE</p>
                     </div>
                     <div class="task-action">
-                        <button id="btn-join-1" class="btn-task" onclick="bukaChannelTelegram()">Join</button>
-                        <button id="btn-claim-1" class="btn-task btn-claim" onclick="validasiJoinChannel()" style="display: none;">Claim</button>
+                        <button id="btn-join-tele" class="btn-task" onclick="jalankanMisiTele()">Join</button>
+                        <button id="btn-claim-tele" class="btn-task btn-claim" onclick="verifikasiMisiTele()" style="display: none;">Check & Claim</button>
                     </div>
                 </div>
             </div>
 
-            <!-- MISI 2: DOWNLOAD SIKKAFUN -->
+            <!-- MISI LINK EKSTERNAL / DOWNLOAD -->
             <div class="task-item">
                 <div class="task-row">
                     <div class="task-info">
-                        <h4>Download SikkaFun App</h4>
-                        <p>+5,000 COFFEE</p>
+                        <h4>Visit Our Partner App</h4>
+                        <p>+2,500 COFFEE</p>
                     </div>
                     <div class="task-action">
-                        <button id="btn-download-2" class="btn-task" onclick="bukaLinkDownload('https://join.sikka.fun/bzvmoua')">Download</button>
+                        <button id="btn-visit" class="btn-task" onclick="jalankanMisiVisit()">Visit</button>
+                        <button id="btn-claim-visit" class="btn-task btn-claim" onclick="klaimMisiVisit()" style="display: none;">Claim</button>
                     </div>
                 </div>
-                <div id="verify-area-2" style="display: none;">
-                    <p style="margin: 5px 0; font-size: 12px; color: #bdc3c7;">Masukkan kode rahasia dari aplikasi SikkaFun:</p>
-                    <div style="display: flex; gap: 5px;">
-                        <input type="text" id="input-code-2" class="input-verify" placeholder="Contoh: SIKKA99">
-                        <button class="btn-task btn-claim" onclick="validasiKodeAPK()">Verify</button>
-                    </div>
-                </div>
-                <button id="btn-done-2" class="btn-task" style="display: none; background-color: #7f8c8d;" disabled>Claimed ✓</button>
             </div>
 
         </div>
     </div>
 
-    <!-- 3. MENU NAVIGASI BAWAH -->
+    <!-- 3. NAVIGASI BAR BAWAH -->
     <nav class="navbar">
-        <button id="nav-tap" class="nav-item active" onclick="pindahTab('tap')">
+        <button id="nav-tap" class="nav-item active" onclick="gantiMenu('tap')">
             <span class="nav-icon">☕</span>
-            <span>Tap</span>
+            <span>Tap Game</span>
         </button>
-        <button id="nav-tasks" class="nav-item" onclick="pindahTab('tasks')">
+        <button id="nav-tasks" class="nav-item" onclick="gantiMenu('tasks')">
             <span class="nav-icon">📋</span>
-            <span>Tasks</span>
+            <span>Tasks Misi</span>
         </button>
     </nav>
 
     <script>
-        // === INTEGRASI DATA AKUN COFFEECOIN ===
-        const BOT_TOKEN = "8342562835:AAH5YH514j_0InacnC_oZYsW3LU2mKX3Kpw"; 
-        const CHANNEL_ID = "@coffeecoin0fficial"; 
-        const KODE_RAHASIA_APK = "COFFEEKAN123"; // Kode rahasia pembuktian download
+        // =========================================================================
+        // ⚠️ ATUR DATA BOT DAN CHANNEL KAMU DI SINI AGAR SISTEM KLAIM JALAN OTOMATIS
+        // =========================================================================
+        const CONFIG_BOT_TOKEN  = "8342562835:AAH5YH514j_0InacnC_oZYsW3LU2mKX3Kpw"; 
+        const CONFIG_CHANNEL_ID = "@coffeecoin0fficial"; 
+        const LINK_MISI_VISIT   = "https://sikka.fun";
+        // =========================================================================
 
-        let totalKoin = parseInt(localStorage.getItem('coffeecoin_score')) || 0;
-        let userIdTelegram = null;
+        let koinSekarang = parseInt(localStorage.getItem('cc_score')) || 0;
+        let idUserTelegram = null;
 
-        document.getElementById('score-text').innerText = totalKoin.toLocaleString();
+        // Cetak saldo awal ke layar game
+        document.getElementById('score-text').innerText = koinSekarang.toLocaleString();
 
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-            if (window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-                userIdTelegram = window.Telegram.WebApp.initDataUnsafe.user.id;
-            }
-        }
-
-        function tambahKoin() {
-            totalKoin += 1;
-            document.getElementById('score-text').innerText = totalKoin.toLocaleString();
-            localStorage.setItem('coffeecoin_score', totalKoin);
-        }
-
-        function pindahTab(target) {
-            document.getElementById('page-tap').style.display = target === 'tap' ? 'block' : 'none';
-            document.getElementById('page-tasks').style.display = target === 'tasks' ? 'block' : 'none';
-            document.getElementById('nav-tap').classList.toggle('active', target === 'tap');
-            document.getElementById('nav-tasks').classList.toggle('active', target === 'tasks');
-            
-            if (target === 'tasks') {
-                periksaStatusSemuaTombol();
-            }
-        }
-
-        function bukaChannelTelegram() {
-            const linkChannel = "https://t.me" + CHANNEL_ID.replace('@', '');
+        // Hubungkan Mini App dengan Telegram API bawaan handphone
+        try {
             if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.openTelegramLink(linkChannel);
-            } else {
-                window.open(linkChannel, '_blank');
+                const tg = window.Telegram.WebApp;
+                tg.ready();
+                tg.expand();
+                if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                    idUserTelegram = tg.initDataUnsafe.user.id;
+                }
             }
-            localStorage.setItem('task_1_status', 'opened');
-            setTimeout(() => { periksaStatusSemuaTombol(); }, 1500);
+        } catch (err) {
+            console.log("Aplikasi dibuka di luar Telegram.");
         }
 
-        function validasiJoinChannel() {
-            if (!userIdTelegram) {
-                alert("ID Telegram tidak terdeteksi. Jalankan lewat aplikasi Telegram HP!");
-                return;
-            }
+        // Fungsi Tap Responsif (Mendukung Multi-touch)
+        const tombolTap = document.getElementById('tap-target');
+        tombolTap.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            koinSekarang += 1;
+            document.getElementById('score-text').innerText = koinSekarang.toLocaleString();
+            localStorage.setItem('cc_score', koinSekarang);
+        });
 
-            const url = `https://telegram.org{BOT_TOKEN}/getChatMember?chat_id=${CHANNEL_ID}&user_id=${userIdTelegram}`;
+        // Fungsi Navigasi Tab Menu
+        function gantiMenu(menuTujuan) {
+            document.getElementById('page-tap').style.display = menuTujuan === 'tap' ? 'block' : 'none';
+            document.getElementById('page-tasks').style.display = menuTujuan === 'tasks' ? 'block' : 'none';
+            document.getElementById('nav-tap').classList.toggle('active', menuTujuan === 'tap');
+            document.getElementById('nav-tasks').classList.toggle('active', menuTujuan === 'tasks');
             
-            fetch(url)
-            .then(res => res.json())
+            if (menuTujuan === 'tasks') {
+                sinkronisasiTampilanMisi();
+            }
+        }
+
+        // LOGIKA MISI 1: JOIN TELEGRAM CHANNEL
+        function jalankanMisiTele() {
